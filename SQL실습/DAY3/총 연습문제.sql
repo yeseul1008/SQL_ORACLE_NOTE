@@ -148,4 +148,6 @@ INNER JOIN STU S ON P.DEPTNO = S.DEPTNO1
 WHERE PAY = (
     SELECT MAX(PAY)
     FROM PROFESSOR);
+    
+select * from student;
 

@@ -1,0 +1,61 @@
+SELECT * FROM TBL_USER;
+SELECT * FROM TBL_BOARD;
+SELECT * FROM TBL_COMMENT;
+
+SELECT COUNT(*) FROM TBL_USER;
+SELECT COUNT(*) FROM TBL_BOARD;
+SELECT COUNT(*) FROM TBL_COMMENT;
+
+SELECT USERID, COUNT(*)
+FROM TBL_COMMENT
+GROUP BY USERID;
+
+SELECT NICKNAME, TITLE
+FROM TBL_BOARD B
+INNER JOIN TBL_USER U ON B.USERID = u.userid;
+
+-- 각 게시글의 제목, 댓글 개수 출력
+-- 댓글이 없는경우 개수 0 출력
+SELECT *
+FROM TBL_BOARD B
+LEFT JOIN tbl_comment C ON B.boardno = C.boardno
+INNER JOIN TBL_USER U ON B.USERID = U.USERID;
+
+SELECT TITLE, COUNT(COMMENTNO) -- *이면 레코드 자체를 출력하기 때문에 안됨 NULL값이 있는 COMMENTNO를 해야함
+FROM TBL_BOARD B
+LEFT JOIN tbl_comment C ON B.boardno = C.boardno
+GROUP BY B.boardno, TITLE;-- 타이틀로만 묶으면 제목이 같은 게시글이 같이 묶임
+
+-- 게시글 번호, 게시글제목, 내용, 작성일, 작성자 닉네임, 댓글 개수(없으면 0) 출력
+SELECT B.BOARDNO, TITLE, B.CONTENTS, B.CDATETIME, NICKNAME, COUNT(COMMENTNO) 
+FROM TBL_BOARD B
+LEFT JOIN tbl_comment C ON B.boardno = C.boardno
+INNER JOIN TBL_USER U ON B.USERID = U.USERID
+GROUP BY B.BOARDNO, B.boardno, B.CONTENTS, B.CDATETIME, TITLE, NICKNAME;
+
+SELECT *
+FROM TBL_BOARD B
+INNER JOIN(
+SELECT B.boardno, COUNT(COMMENTNO) AS CNT
+FROM tbl_board B
+LEFT JOIN TBL_COMMENT C ON B.BOARDNO = c.boardno
+GROUP BY B.BOARDNO
+) T ON B.boardno = T.boardno;
+
+
+---
+-- CASE ~ WHEN
+-- PROFESSOR
+-- 400이상의 급여를 받으면 A, 300~400 사이면 B, 나머지는 C출력
+-- 교수이름, 급여 등급(A~C)
+
+SELECT * FROM PROFESSOR;
+
+SELECT
+    NAME,
+    CASE
+        WHEN PAY >= 400 THEN 'A'
+        WHEN PAY >= 300 THEN 'B'
+        ELSE 'C'
+    END AS PAY_GRADE
+FROM PROFESSOR;
